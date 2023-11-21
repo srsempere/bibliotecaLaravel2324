@@ -8,6 +8,9 @@
                     <th scope="col" class="px-6 py-3">
                         Categoría
                     </th>
+                    <th scope="col" class="px-6 py-3 text-center align-middle" colspan="2">
+                        Acciones
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -16,10 +19,26 @@
                         <td class="px-6 py-4">
                             {{ $categoria->name }}
                         </td>
+                        <td class="px-6 py-4">
+                            Editar
+                        </td>
+                        <td class="px-6 py-4">
+                            <form action="{{ route('categorias.destroy', ['categoria' => $categoria]) }}"
+                                method="post">
+                                @csrf
+                                @method('DELETE')
+                                <x-primary-button class="bg-red-700">
+                                    Borrar
+                                </x-primary-button>
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
+    <form action="{{ route('categorias.create') }}" method="post">
+        <x-primary-button class="bg-green-700 m-4">Crear categoría</x-primary-button>
+    </form>
 
 </x-guest-layout>

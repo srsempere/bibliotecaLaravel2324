@@ -27,7 +27,7 @@
                                 method="post">
                                 @csrf
                                 @method('DELETE')
-                                <x-primary-button  class="bg-red-700">
+                                <x-primary-button class="bg-red-700">
                                     Borrar
                                 </x-primary-button>
                             </form>
@@ -37,5 +37,8 @@
             </tbody>
         </table>
     </div>
+    <form action="{{ route('categorias.create') }}" method="post">
+        <x-primary-button class="bg-green-700 m-4">Crear categoría</x-primary-button>
+    </form>
 
 </x-guest-layout>

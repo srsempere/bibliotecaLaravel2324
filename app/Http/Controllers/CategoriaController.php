@@ -29,9 +29,7 @@ class CategoriaController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:50'
-        ]);
+        $validated = $this->validar($request);
         $categoria = new Categoria($validated);
         $categoria->save();
         return redirect()->route('categorias.index');
@@ -50,7 +48,7 @@ class CategoriaController extends Controller
      */
     public function edit(Categoria $categoria)
     {
-        //
+        return view('categorias.edit', ['categoria' => $categoria]);
     }
 
     /**
@@ -58,7 +56,9 @@ class CategoriaController extends Controller
      */
     public function update(Request $request, Categoria $categoria)
     {
-        //
+        $validated = $this->validar($request);
+        $categoria->update($validated);
+        return redirect()->route('categorias.index');
     }
 
     /**
@@ -68,5 +68,12 @@ class CategoriaController extends Controller
     {
         $categoria->delete();
         return redirect()->route('categorias.index');
+    }
+
+    private function validar(REQUEST $request)
+    {
+        return $request->validate([
+            'name' => 'required|string|max:50'
+        ]);
     }
 }

@@ -1,6 +1,4 @@
 <x-guest-layout>
-
-
     <div class="relative overflow-x-auto">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -20,7 +18,9 @@
                             {{ $categoria->name }}
                         </td>
                         <td class="px-6 py-4">
-                            Editar
+                           <a href="{{ route('categorias.edit',['categoria' => $categoria]) }}">
+                            <x-primary-button class=bg-blue-600>Editar</x-primary-button>
+                        </a>
                         </td>
                         <td class="px-6 py-4">
                             <form action="{{ route('categorias.destroy', ['categoria' => $categoria]) }}"
@@ -37,7 +37,7 @@
             </tbody>
         </table>
     </div>
-    <form action="{{ route('categorias.create') }}" method="post">
+    <form action="{{ route('categorias.create') }}" method="get">
         <x-primary-button class="bg-green-700 m-4">Crear categoría</x-primary-button>
     </form>
 

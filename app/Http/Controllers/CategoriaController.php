@@ -29,7 +29,12 @@ class CategoriaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:50'
+        ]);
+        $categoria = new Categoria($validated);
+        $categoria->save();
+        return redirect()->route('categorias.index');
     }
 
     /**
@@ -37,7 +42,7 @@ class CategoriaController extends Controller
      */
     public function show(Categoria $categoria)
     {
-        return view('categorias.show', compact('categoria'));
+        //
     }
 
     /**

@@ -24,7 +24,9 @@
                 @foreach ($articulos as $articulo)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <td class="px-6 py-4">
-                            {{ $articulo->nombre }}
+                            <a href="{{ route('articulos.show', ['articulo' => $articulo]) }}">
+                                {{ $articulo->nombre }}
+                            </a>
                         </td>
                         <td class="px-6 py-4">
                             {{ $articulo->autor }}
@@ -36,13 +38,12 @@
                             {{ $articulo->categoria->name }}
                         </td>
                         <td class="px-6 py-4">
-                           <a href="{{ route('articulos.edit',['articulo' => $articulo]) }}">
-                            <x-primary-button class=bg-blue-600>Editar</x-primary-button>
-                        </a>
+                            <a href="{{ route('articulos.edit', ['articulo' => $articulo]) }}">
+                                <x-primary-button class=bg-blue-600>Editar</x-primary-button>
+                            </a>
                         </td>
                         <td class="px-6 py-4">
-                            <form action="{{ route('articulos.destroy', ['articulo' => $articulo]) }}"
-                                method="post">
+                            <form action="{{ route('articulos.destroy', ['articulo' => $articulo]) }}" method="post">
                                 @csrf
                                 @method('DELETE')
                                 <x-primary-button class="bg-red-700">

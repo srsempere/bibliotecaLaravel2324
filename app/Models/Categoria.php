@@ -11,7 +11,7 @@ class Categoria extends Model
     use HasFactory;
     protected $fillable = ['name'];
 
-    public function articulo(): HasMany
+    public function articulos(): HasMany
     {
         return $this->hasMany(Articulo::class);
     }

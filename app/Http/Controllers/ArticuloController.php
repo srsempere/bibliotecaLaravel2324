@@ -13,7 +13,7 @@ class ArticuloController extends Controller
      */
     public function index()
     {
-        return view('articulos.index',[
+        return view('articulos.index', [
             'articulos' => Articulo::all(),
         ]);
     }
@@ -39,7 +39,7 @@ class ArticuloController extends Controller
      */
     public function show(Articulo $articulo)
     {
-        return view('articulos.show',[
+        return view('articulos.show', [
             'articulo' => $articulo,
         ]);
     }
@@ -66,6 +66,29 @@ class ArticuloController extends Controller
     public function destroy(Articulo $articulo)
     {
         $articulo->delete();
+        return redirect()->route('articulos.index');
+    }
+
+    public function cambiar_imagen(Articulo $articulo)
+    {
+        return view('articulos.cambiar_imagen', [
+            'articulo' => $articulo,
+        ]);
+    }
+
+    public function guardar_imagen(Articulo $articulo, Request $request)
+    {
+        $request->validate([
+            'imagen' => 'required|mimes:png',
+        ]);
+
+        $imagen = $request->file('imagen');
+        $nombreImagen = $articulo->id . '.png';
+        $rutaImagen = $imagen->storeAs('uploads', $nombreImagen, 'public');
+
+        // Actualizar la ruta en la base de datos
+        $articulo->ruta_imagen = $rutaImagen;
+        $articulo->save();
         return redirect()->route('articulos.index');
     }
 }

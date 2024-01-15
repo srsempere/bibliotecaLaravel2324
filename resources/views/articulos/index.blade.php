@@ -4,6 +4,9 @@
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">
+                        Imagen
+                    </th>
+                    <th scope="col" class="px-6 py-3">
                         Nombre
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -23,6 +26,13 @@
             <tbody>
                 @foreach ($articulos as $articulo)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <td class="px-6 py-4">
+                            @if ($articulo->ruta_imagen)
+                                <img src="{{ asset('storage/' . $articulo->ruta_imagen) }}" alt="Imagen del libro">
+                                @else
+                                <p>"El artículo no tiene imagen actualmente."</p>
+                            @endif
+                        </td>
                         <td class="px-6 py-4">
                             <a href="{{ route('articulos.show', ['articulo' => $articulo]) }}">
                                 {{ $articulo->nombre }}

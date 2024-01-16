@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
+use Intervention\Image\Facades\Image;
 
 class ArticuloController extends Controller
 {
@@ -106,18 +107,17 @@ class ArticuloController extends Controller
         $imagen = $request->file('imagen');
         $nombre = $articulo->id . '.png';
         $imagen->storeAs('uploads', $nombre, 'public');
-
         // Redimensionado de imagen (librería).
         $manager = new ImageManager(new Driver());
         $imagen = $manager->read($imagen);
-        $imagen->scaleDown(400);
+        $imagen->scaleDown(100);
         $ruta = Storage::path('public/uploads/' . $nombre);
         $imagen->save($ruta);
         // ------------------------------------
 
 
         // Actualizar la ruta en la base de datos
-        $articulo->ruta_imagen = $ruta;
+        $articulo->ruta_imagen = 'uploads/' . $nombre;
         $articulo->save();
         return redirect()->route('articulos.index');
     }

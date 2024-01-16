@@ -26,8 +26,15 @@
          <!-- Categoria del libro -->
 
          <div>
-            <x-input-label for="categoria" :value="__('Categoria')" />
-            <x-text-input id="categoria" class="block mt-1 w-full" type="text" name="categoria" :value="old('categoria', $articulo->categoria->name)" required autofocus autocomplete="categoria" />
+            <x-input-label for="categoria_id" :value="__('Categoria')" />
+            <select name="categoria_id" id="categoria_id">
+                @foreach ($categorias as $categoria)
+                    <option value="{{ $categoria->id }}"
+                    {{ old('categoria_id', $articulo->categoria_id) == $categoria->id  ? 'selected' : '' }}>
+                        {{ $categoria->name }}
+                    </option>
+                @endforeach
+            </select>
             <x-input-error :messages="$errors->get('categoria')" class="mt-2" />
         </div>
 

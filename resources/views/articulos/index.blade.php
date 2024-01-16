@@ -66,7 +66,7 @@
             </tbody>
         </table>
     </div>
-    <form action="{{ route('categorias.create') }}" method="get">
+    <form action="{{ route('articulos.create') }}" method="get">
         <x-primary-button class="bg-green-700 m-4">Crear libro</x-primary-button>
     </form>
 </x-app-layout>

@@ -23,7 +23,9 @@ class ArticuloController extends Controller
      */
     public function create()
     {
-        //
+        return view('articulos.create',[
+            'categorias' => Categoria::all(),
+        ]);
     }
 
     /**
@@ -31,7 +33,10 @@ class ArticuloController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $this->validar($request);
+        $articulo = new Articulo($validated);
+        $articulo->save();
+        return redirect()->route('articulos.index');
     }
 
     /**
@@ -90,5 +95,15 @@ class ArticuloController extends Controller
         $articulo->ruta_imagen = $rutaImagen;
         $articulo->save();
         return redirect()->route('articulos.index');
+    }
+
+    private function validar(REQUEST $request)
+    {
+        return $request->validate([
+            'nombre' => 'required|string|max:50',
+            'autor' => 'required|string|max:50',
+            'precio' => 'required|decimal:2|between:-9999.99,9999.99',
+            'categoria_id' => 'required|integer|exists:categorias,id'
+        ]);
     }
 }

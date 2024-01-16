@@ -67,6 +67,6 @@
         </table>
     </div>
     <form action="{{ route('categorias.create') }}" method="get">
-        <x-primary-button class="bg-green-700 m-4">Crear categoría</x-primary-button>
+        <x-primary-button class="bg-green-700 m-4">Crear libro</x-primary-button>
     </form>
 </x-app-layout>

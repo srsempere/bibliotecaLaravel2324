@@ -3,6 +3,7 @@
 use App\Http\Controllers\ArticuloController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Articulo;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,7 +18,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('articulos.index', [
+        'articulos' => Articulo::all(),
+    ]);
 });
 
 Route::get('/dashboard', function () {
@@ -30,9 +33,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::resource('categorias', CategoriaController::class);
+Route::resource('categorias', CategoriaController::class)->middleware('auth');
 
-Route::resource('articulos', ArticuloController::class);
+// El index va a ser público, pero para los demás métodos tienes que estar registrado.
+
+Route::resource('articulos', ArticuloController::class)->except(['index'])->middleware('auth');
+Route::get('articulos', [ArticuloController::class, 'index'])->name('articulos.index');
 
 Route::get('/cambiar_imagen/{articulo}', [ArticuloController::class, 'cambiar_imagen'])
     ->name('articulos.cambiar_imagen')->whereNumber('articulo');

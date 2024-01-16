@@ -36,6 +36,7 @@ class ArticuloController extends Controller
         $validated = $this->validar($request);
         $articulo = new Articulo($validated);
         $articulo->save();
+        session()->flash('success', 'El libro se ha creado correctamente');
         return redirect()->route('articulos.index');
     }
 

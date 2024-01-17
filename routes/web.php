@@ -23,6 +23,12 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/principal', function () {
+    return view('principal', [
+        'articulos' => Articulo::all(),
+    ]);
+});
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

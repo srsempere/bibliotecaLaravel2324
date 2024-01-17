@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
-use Intervention\Image\Facades\Image;
+
 
 class ArticuloController extends Controller
 {
@@ -103,22 +103,17 @@ class ArticuloController extends Controller
             'imagen' => 'required|mimes:png',
         ]);
 
-        // Coger la imagen del formulario y guardarla en disco.
         $imagen = $request->file('imagen');
-        $nombre = $articulo->id . '.png';
         // $imagen->storeAs('uploads', $nombre, 'public');
-
-        // Redimensionado de imagen (librería).
+        $imagen_original = $imagen;
         $manager = new ImageManager(new Driver());
-        $imagen = $manager->read($imagen);
-        $imagen->scaleDown(100);
-        $ruta = Storage::path('public/uploads/' . $nombre);
-        $imagen->save($ruta);
-        // ------------------------------------
+        $articulo->guardar_imagen($imagen, $articulo->imagen, 400, $manager);
 
+        $imagen = $imagen_original;
+        $articulo->guardar_imagen($imagen, $articulo->miniatura, 100, $manager);
 
         // Actualizar la ruta en la base de datos
-        $articulo->ruta_imagen = 'uploads/' . $nombre;
+        $articulo->ruta_imagen = 'uploads/' . $articulo->imagen;
         $articulo->save();
         session()->flash('success', 'La imagen se ha actualizado correctamente');
         return redirect()->route('articulos.index');

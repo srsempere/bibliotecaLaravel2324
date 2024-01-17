@@ -27,8 +27,8 @@
                 @foreach ($articulos as $articulo)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <td class="px-6 py-4">
-                            @if ($articulo->ruta_imagen)
-                                <img src="{{ asset('storage/' . $articulo->ruta_imagen) }}" alt="Imagen del libro">
+                            @if ($articulo->miniatura)
+                                <img src="{{ asset('storage/uploads/' . $articulo->miniatura) }}" alt="Imagen del libro">
                                 @else
                                 <p>"El artículo no tiene imagen actualmente."</p>
                             @endif

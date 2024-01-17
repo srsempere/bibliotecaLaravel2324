@@ -1,13 +1,11 @@
 <x-app-layout>
     <div class="flex">
-        <div
-            class="p-2 grid grid-cols-4 gap-4 justify-center justify-items-center">
+        <div class="p-2 grid grid-cols-4 gap-4 justify-center justify-items-center">
             @foreach ($articulos as $articulo)
                 <div
                     class="p-6 max-w-xs min-w-full bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
                     <a href="#">
-                        <h5
-                            class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                             {{ $articulo->nombre }}
                         </h5>
                     </a>
@@ -15,7 +13,7 @@
                         Autor: {{ $articulo->autor }}
                     </p>
                     <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                        Precio: {{ $articulo->precio  }} €
+                        Precio: {{ $articulo->precio }} €
                     </p>
                     <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
                         {{ $articulo->categoria->nombre }}

@@ -106,7 +106,8 @@ class ArticuloController extends Controller
         // Coger la imagen del formulario y guardarla en disco.
         $imagen = $request->file('imagen');
         $nombre = $articulo->id . '.png';
-        $imagen->storeAs('uploads', $nombre, 'public');
+        // $imagen->storeAs('uploads', $nombre, 'public');
+
         // Redimensionado de imagen (librería).
         $manager = new ImageManager(new Driver());
         $imagen = $manager->read($imagen);
@@ -119,6 +120,7 @@ class ArticuloController extends Controller
         // Actualizar la ruta en la base de datos
         $articulo->ruta_imagen = 'uploads/' . $nombre;
         $articulo->save();
+        session()->flash('success', 'La imagen se ha actualizado correctamente');
         return redirect()->route('articulos.index');
     }
 

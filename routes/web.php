@@ -18,16 +18,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('articulos.index', [
-        'articulos' => Articulo::all(),
-    ]);
-});
-
-Route::get('/principal', function () {
     return view('principal', [
         'articulos' => Articulo::all(),
     ]);
-});
+})->name('principal');
+
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');

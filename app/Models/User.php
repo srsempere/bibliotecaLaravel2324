@@ -43,6 +43,11 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function facturas()
+    {
+        return $this->hasMany(Factura::class);
+    }
+
     public function es_admin(): bool
     {
         return $this->is_admin;

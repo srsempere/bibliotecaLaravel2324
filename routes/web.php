@@ -1,9 +1,18 @@
 <?php
 
+use App\Generico\Carrito;
 use App\Http\Controllers\ArticuloController;
+use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\ProfileController;
+use App\Mail\PedidoGenerado;
 use App\Models\Articulo;
+use App\Models\Factura;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,6 +29,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('principal', [
         'articulos' => Articulo::all(),
+        'carrito' => carrito(),
     ]);
 })->name('principal');
 
@@ -46,6 +56,64 @@ Route::get('/cambiar_imagen/{articulo}', [ArticuloController::class, 'cambiar_im
     ->name('articulos.cambiar_imagen')->whereNumber('articulo');
 
 Route::post('/cambiar_imagen/{articulo}', [ArticuloController::class, 'guardar_imagen'])
-->name('articulos.guardar_imagen')->whereNumber('articulo');
+    ->name('articulos.guardar_imagen')->whereNumber('articulo');
 
-require __DIR__.'/auth.php';
+Route::get('/carrito/insertar/{id}', [CarritoController::class, 'insertar'])
+    ->name('carrito.insertar')->whereNumber('id');
+
+Route::get('/carrito/eliminar/{id}', [CarritoController::class, 'eliminar'])
+    ->name('carrito.eliminar')->whereNumber('id');
+
+Route::get('/carrito/vaciar', [CarritoController::class, 'vaciar'])
+    ->name('carrito.vaciar');
+
+Route::get('/comprar', function () {
+    return view('comprar', [
+        'carrito' => Carrito(),
+    ]);
+})->middleware('auth')->name('comprar');
+
+Route::post('/realizar_compra', function (Request $request) {
+    $carrito = Carrito();
+    DB::beginTransaction();
+    $factura = new Factura();
+    $factura->user()->associate(Auth::user());
+    // Alternativa:
+    // $factura->user_id = Auth::id();
+    $factura->save();
+
+    $attachs = [];
+    foreach ($carrito->getLineas() as $articulo_id => $linea) {
+        $attachs[$articulo_id] = ['cantidad' => $linea->getCantidad()];
+    }
+    $factura->articulos()->attach($attachs);
+
+    // Alternativa 1:
+    // foreach ($carrito->getLineas() as $linea) {
+    //     $factura->articulos()
+    //         ->attach($linea->getArticulo(), [
+    //             'cantidad' => $linea->getCantidad()
+    //         ]);
+    // }
+
+    // Alternativa 2:
+    // $inserts = [];
+    // foreach ($carrito->getLineas() as $articulo_id => $linea) {
+    //     $inserts[] = [
+    //         'factura_id' => $factura->id,
+    //         'articulo_id' => $articulo_id,
+    //         'cantidad' => $linea->getCantidad(),
+    //     ];
+    // }
+    // DB::table('articulo_factura')->insert($inserts);
+
+    DB::commit();
+    // Mail::to($request->user())->send(new PedidoGenerado($factura));
+    session()->flash('success', 'La factura se ha generado correctamente.');
+    session()->forget('carrito');
+    return redirect()->route('principal');
+})->middleware('auth')->name('realizar_compra');
+
+Route::resource('facturas', FacturaController::class);
+
+require __DIR__ . '/auth.php';

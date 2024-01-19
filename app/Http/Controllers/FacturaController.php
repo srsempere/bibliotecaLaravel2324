@@ -4,62 +4,40 @@ namespace App\Http\Controllers;
 
 use App\Models\Factura;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FacturaController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Create the controller instance.
      */
+    public function __construct()
+    {
+        $this->authorizeResource(Factura::class, 'factura');
+    }
+
     public function index()
     {
-        //
+        if (Auth::user()->es_admin()) {
+            $facturas = Factura::with('user');
+        } else {
+            $facturas = Auth::user()->facturas()->with('user');
+        }
+        $facturas = $facturas
+            ->selectRaw('facturas.id, facturas.user_id, facturas.created_at, sum(cantidad * precio) as total')
+            ->join('articulo_factura', 'facturas.id', '=', 'articulo_factura.factura_id')
+            ->join('articulos', 'articulos.id', '=', 'articulo_factura.articulo_id')
+            ->groupBy('facturas.id')
+            ->get();
+        return view('facturas.index', [
+            'facturas' => $facturas,
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(Factura $factura)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Factura $factura)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Factura $factura)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Factura $factura)
-    {
-        //
+        return view('facturas.show', [
+            'factura' => $factura,
+        ]);
     }
 }

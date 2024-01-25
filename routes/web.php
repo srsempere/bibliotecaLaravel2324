@@ -108,7 +108,7 @@ Route::post('/realizar_compra', function (Request $request) {
     // DB::table('articulo_factura')->insert($inserts);
 
     DB::commit();
-    // Mail::to($request->user())->send(new PedidoGenerado($factura));
+    Mail::to($request->user())->send(new PedidoGenerado($factura));
     session()->flash('success', 'La factura se ha generado correctamente.');
     session()->forget('carrito');
     return redirect()->route('principal');

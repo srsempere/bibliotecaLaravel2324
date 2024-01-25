@@ -48,6 +48,11 @@ class FacturaController extends Controller
         $factura = Factura::find($factura);
 
         $pdf = FacadePdf::loadView('facturas.pdf', compact('factura'));
-        return $pdf->stream('factura.pdf'); // O usa ->stream() para mostrar en el navegador
+        return $pdf->download('factura.pdf'); // O usa ->stream() para mostrar en el navegador
+    }
+
+    public function getPdfData($factura) {
+        $pdf = FacadePdf::loadView('facturas.pdf', compact('factura'));
+        return $pdf->output();
     }
 }

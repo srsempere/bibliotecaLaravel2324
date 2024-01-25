@@ -40,6 +40,9 @@
                                     Borrar
                                 </x-primary-button>
                             </form> --}}
+                            <x-primary-button class="bg-blue-500">
+                                Imprimir
+                            </x-primary-button>
                         </td>
                     </tr>
                 @endforeach

@@ -44,4 +44,9 @@
             </tbody>
         </table>
     </div>
+    <a href="{{ route('facturas.print', ['factura' => $factura]) }}">
+        <x-primary-button class="bg-blue-500">
+            Imprimir
+        </x-primary-button>
+    </a>
 </x-app-layout>

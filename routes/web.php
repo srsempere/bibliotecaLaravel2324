@@ -116,4 +116,7 @@ Route::post('/realizar_compra', function (Request $request) {
 
 Route::resource('facturas', FacturaController::class);
 
+Route::get('/factura/imprimir/{factura}', [FacturaController::class, 'print'])->name('facturas.print');
+
+
 require __DIR__ . '/auth.php';

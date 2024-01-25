@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Factura;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use PDF;
 
 class FacturaController extends Controller
 {
@@ -39,5 +41,13 @@ class FacturaController extends Controller
         return view('facturas.show', [
             'factura' => $factura,
         ]);
+    }
+
+    public function print($factura)
+    {
+        $factura = Factura::find($factura);
+
+        $pdf = FacadePdf::loadView('facturas.pdf', compact('factura'));
+        return $pdf->stream('factura.pdf'); // O usa ->stream() para mostrar en el navegador
     }
 }
